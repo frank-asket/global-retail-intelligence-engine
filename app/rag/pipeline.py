@@ -53,6 +53,12 @@ def _call_llm(prompt: str) -> str:
         )
         return (resp.choices[0].message.content or "").strip()
     except Exception as e:
+        err = str(e).lower()
+        if "401" in err or "user not found" in err or "unauthorized" in err:
+            return (
+                "**Authentication failed.** Check your `OPENROUTER_API_KEY` in `.env` — "
+                "it may be invalid or expired. Get or reset your key at [openrouter.ai](https://openrouter.ai/keys)."
+            )
         return f"[LLM error: {e}] Use the context above to answer."
 
 

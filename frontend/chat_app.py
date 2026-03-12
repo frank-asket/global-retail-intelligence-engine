@@ -62,7 +62,7 @@ def main():
     st.sidebar.markdown("### How to run")
     st.sidebar.markdown("1. Start API: `uvicorn app.main:app --reload`")
     st.sidebar.markdown("2. Run this UI: `streamlit run frontend/chat_app.py`")
-    st.sidebar.markdown("3. Set `OPENAI_API_KEY` for full LLM answers.")
+    st.sidebar.markdown("3. Add `OPENROUTER_API_KEY` to `.env` for full LLM answers (get a key at [openrouter.ai](https://openrouter.ai)).")
 
 
 if __name__ == "__main__":
