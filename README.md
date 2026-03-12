@@ -271,7 +271,7 @@ global-retail-intelligence-engine
 | **Backend**     | Python · FastAPI                    |
 | **Retrieval**   | FAISS vector database · BM25       |
 | **Embeddings**  | Sentence Transformers              |
-| **Frontend**    | Streamlit chat interface            |
+| **Frontend**    | Streamlit or **Next.js** (in `web/`) |
 | **Infrastructure** | Docker · GitHub                  |
 
 ---
@@ -336,11 +336,17 @@ uvicorn app.main:app --reload
 
 ### **5. Launch chat interface**
 
+**Option A – Streamlit**
 ```bash
 streamlit run frontend/chat_app.py
 ```
+Assistant UI: [http://localhost:8501](http://localhost:8501)
 
-**Assistant UI:** [http://localhost:8501](http://localhost:8501)
+**Option B – Next.js** (good for Vercel)
+```bash
+cd web && npm install && npm run dev
+```
+Chat UI: [http://localhost:3000](http://localhost:3000). Set `NEXT_PUBLIC_CHAT_API_URL` if the API is elsewhere. See [docs/NEXTJS_FRONTEND.md](docs/NEXTJS_FRONTEND.md).
 
 ---
 
