@@ -1,9 +1,13 @@
 fastapi
 uvicorn
 pandas
+numpy
 faiss-cpu
 sentence-transformers
 streamlit
 pydantic
 requests
 scikit-learn
+rank_bm25
+openai
+python-multipart

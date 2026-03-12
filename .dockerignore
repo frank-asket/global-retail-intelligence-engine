@@ -1,0 +1,14 @@
+venv
+.venv
+__pycache__
+*.pyc
+.git
+.cursor
+*.md
+.env
+.DS_Store
+evaluation
+frontend
+*.csv
+!data/raw/.gitkeep
+!data/processed/.gitkeep
