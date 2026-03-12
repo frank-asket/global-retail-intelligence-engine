@@ -1,6 +1,3 @@
-"""
-Streamlit chat interface: user question + country, calls FastAPI POST /chat, displays response.
-"""
 import os
 import streamlit as st
 

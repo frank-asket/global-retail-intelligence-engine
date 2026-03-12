@@ -10,10 +10,13 @@ from pathlib import Path
 
 
 def standardize_country(s: str) -> str:
-    """Standardize country names."""
+    """Standardize country names (e.g. UK -> United Kingdom for filter consistency)."""
     if pd.isna(s):
         return ""
-    return str(s).strip()
+    s = str(s).strip()
+    if s.upper() == "UK":
+        return "United Kingdom"
+    return s
 
 
 def standardize_category(s: str) -> str:
@@ -26,6 +29,7 @@ def standardize_category(s: str) -> str:
 def main():
     base = Path(__file__).resolve().parent.parent.parent
     raw_path = base / "data" / "raw" / "products_raw.csv"
+    task1_path = base / "data" / "raw" / "task1_data.csv"
     processed_dir = base / "data" / "processed"
     processed_dir.mkdir(parents=True, exist_ok=True)
     out_path = processed_dir / "products_clean.csv"
@@ -36,6 +40,9 @@ def main():
         )
 
     df = pd.read_csv(raw_path)
+    if task1_path.exists():
+        task1 = pd.read_csv(task1_path)
+        df = pd.concat([df, task1], ignore_index=True)
 
     # 1. Remove Internal_Notes
     if "Internal_Notes" in df.columns:

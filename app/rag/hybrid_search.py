@@ -63,9 +63,11 @@ class HybridRetriever:
         query: str,
         country: Optional[str] = None,
         top_k: Optional[int] = None,
+        prefer_policy: bool = False,
     ) -> list[dict[str, Any]]:
         """
         Run hybrid search (vector + BM25), optionally filter by country.
+        When prefer_policy is True (warranty/policy queries), boost docs with category Policy.
         Returns list of metadata dicts with score, ordered by relevance.
         """
         k = top_k or self.top_k
@@ -87,10 +89,6 @@ class HybridRetriever:
         indices_bm25 = order_bm25.tolist()
         scores_bm25_list = bm25_scores.tolist()
 
-        # Normalize BM25 to [0,1] for fusion (avoid div by zero)
-        max_bm = max(scores_bm25_list) or 1.0
-        scores_bm25_norm = [s / max_bm for s in scores_bm25_list]
-
         # Reciprocal rank fusion: score = 1/(rank_vec) + 1/(rank_bm25)
         rank_vec = {idx: r for r, idx in enumerate(indices_vec, 1)}
         rank_bm25 = {int(idx): r for r, idx in enumerate(indices_bm25, 1)}
@@ -99,14 +97,17 @@ class HybridRetriever:
         for idx in all_indices:
             rv = rank_vec.get(idx, 1000)
             rb = rank_bm25.get(idx, 1000)
-            fused.append((idx, 1.0 / rv + 1.0 / rb))
+            score = 1.0 / rv + 1.0 / rb
+            # Hierarchical retrieval: boost Policy docs for policy-style queries
+            if prefer_policy and (self._metadata[idx].get("category") or "").strip().lower() == "policy":
+                score += 1.5
+            fused.append((idx, score))
         fused.sort(key=lambda x: -x[1])
 
         # Apply country filter and take top_k
         ordered_indices = [idx for idx, _ in fused]
         filtered = self._filter_by_country(ordered_indices, country)
         if not filtered and country:
-            # Fallback: return top fused without country filter so we don't return empty
             filtered = ordered_indices[:k]
         else:
             filtered = filtered[:k] if filtered else ordered_indices[:k]

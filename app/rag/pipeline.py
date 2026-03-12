@@ -13,6 +13,9 @@ from app.rag.country_filter import resolve_country
 from app.rag.hybrid_search import HybridRetriever
 from app.rag.prompt_builder import build_rag_prompt
 
+# Keywords that indicate a policy/warranty query for hierarchical retrieval
+POLICY_QUERY_KEYWORDS = ("warranty", "warranties", "policy", "policies", "guarantee", "return", "coverage", "standard warranty", "electronics warranty")
+
 
 @dataclass
 class RAGResponse:
@@ -22,18 +25,29 @@ class RAGResponse:
 
 
 def _call_llm(prompt: str) -> str:
-    """Call OpenAI chat completion. Falls back to context-only summary if no API key."""
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if not api_key or not api_key.strip():
+    """Call LLM via OpenRouter (if OPENROUTER_API_KEY set) or OpenAI. Falls back to message if no key."""
+    openrouter_key = os.environ.get("OPENROUTER_API_KEY")
+    openai_key = os.environ.get("OPENAI_API_KEY")
+    api_key = (openrouter_key or openai_key or "").strip()
+    if not api_key:
         return (
-            "[No OPENAI_API_KEY set. Set it to use LLM answers.] "
+            "[No OPENROUTER_API_KEY or OPENAI_API_KEY set in .env. Set one to use LLM answers.] "
             "Here is the retrieved context you could use to answer the question."
         )
     try:
         from openai import OpenAI
-        client = OpenAI(api_key=api_key)
+        if openrouter_key and openrouter_key.strip():
+            # OpenRouter: OpenAI-compatible API at openrouter.ai
+            client = OpenAI(
+                base_url="https://openrouter.ai/api/v1",
+                api_key=openrouter_key.strip(),
+            )
+            model = os.environ.get("OPENROUTER_MODEL", "openai/gpt-4o-mini")
+        else:
+            client = OpenAI(api_key=openai_key)
+            model = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
         resp = client.chat.completions.create(
-            model=os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
+            model=model,
             messages=[{"role": "user", "content": prompt}],
             max_tokens=500,
         )
@@ -85,9 +99,15 @@ def run_rag(
             block_reason="restricted_data",
         )
 
-    # 3. Retrieve
+    # 3. Retrieve (hierarchical: prefer Policy docs for warranty/policy queries)
+    prefer_policy = any(k in query.lower() for k in POLICY_QUERY_KEYWORDS)
     retriever = HybridRetriever(top_k=top_k)
-    docs = retriever.search(query=query, country=resolved_country, top_k=top_k)
+    docs = retriever.search(
+        query=query,
+        country=resolved_country,
+        top_k=top_k,
+        prefer_policy=prefer_policy,
+    )
 
     # 4. Build prompt and call LLM
     prompt = build_rag_prompt(query, docs, resolved_country)
