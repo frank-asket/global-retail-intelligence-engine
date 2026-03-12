@@ -10,7 +10,7 @@ from typing import Any, List, Optional
 
 from app.guardrails.prompt_injection import detect_prompt_injection
 from app.guardrails.security_filter import check_restricted_data
-from app.rag.country_filter import resolve_country
+from app.rag.country_filter import resolve_countries
 from app.rag.hybrid_search import HybridRetriever
 from app.rag.intent_classifier import Intent, classify_intent
 from app.rag.prompt_builder import build_rag_prompt
@@ -104,8 +104,8 @@ def run_rag(
     7. Build context and send to LLM (with intent hint to stay on track).
     8. Sanitize response and return.
     """
-    # 1. Country
-    resolved_country = resolve_country(query, country)
+    # 1. Countries (single or multiple, e.g. Ghana and Nigeria)
+    resolved_countries = resolve_countries(query, country)
 
     # 2. Security: prompt injection
     inj = detect_prompt_injection(query)
@@ -151,17 +151,18 @@ def run_rag(
     if len(sub_queries_for_retrieval) == 1:
         docs = retriever.search(
             query=sub_queries_for_retrieval[0],
-            country=resolved_country,
+            country=resolved_countries[0] if len(resolved_countries) == 1 else None,
+            countries=resolved_countries if len(resolved_countries) > 1 else None,
             top_k=top_k,
             prefer_policy=prefer_policy,
             allowed_categories=allowed_categories,
         )
     else:
-        # Retrieve for each sub-query, then merge by best score (metadata filtering inside search)
         per_query_docs = [
             retriever.search(
                 query=sq,
-                country=resolved_country,
+                country=resolved_countries[0] if len(resolved_countries) == 1 else None,
+                countries=resolved_countries if len(resolved_countries) > 1 else None,
                 top_k=top_k,
                 prefer_policy=prefer_policy,
                 allowed_categories=allowed_categories,
@@ -171,7 +172,7 @@ def run_rag(
         docs = _merge_retrieval_results(per_query_docs, top_k)
 
     # 6. Build prompt (with intent hint) and call LLM
-    prompt = build_rag_prompt(query, docs, resolved_country, intent=intent)
+    prompt = build_rag_prompt(query, docs, countries=resolved_countries, intent=intent)
     answer = _call_llm(prompt)
 
     # 7. Sanitize

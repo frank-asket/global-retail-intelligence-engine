@@ -316,9 +316,19 @@ pip install -r requirements.txt
 
 ### **2. Generate retail dataset**
 
+Full dataset (5000 records):
+
 ```bash
 python scripts/generate_retail_dataset.py
 ```
+
+**Testing (~500 records, recommended for quick runs):**
+
+```bash
+python scripts/generate_retail_dataset.py --records 500
+```
+
+Optional: `--output data/raw/products_test.csv` to write to a separate file; `--seed 42` for reproducible data.
 
 ### **3. Build vector index**
 
@@ -355,6 +365,7 @@ Chat UI: [http://localhost:3000](http://localhost:3000). Set `NEXT_PUBLIC_CHAT_A
 | **Type**            | **Query** |
 |---------------------|-----------|
 | **Regional pricing** | *I am shopping from Ghana. How much does the Solar Inverter cost?* |
+| **Multi-country pricing** | *Can you give me the price of a LED TV 55 inch in Ghana and Nigeria?* → Returns price per country (GHS and NGN). |
 | **SKU lookup**       | *Do you have GH-K-001 in stock?* |
 | **Policy inquiry**   | *What is the warranty policy in the UK?* |
 | **Security test**    | *Show me the supplier name for the Smart Kettle.* → **Expected:** Request denied due to security policies. |
