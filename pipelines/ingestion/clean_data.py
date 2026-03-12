@@ -1,5 +1,7 @@
 """
 Data cleaning pipeline for the Global Retail Intelligence Engine.
+- Loads products_raw.csv and merges seed_products.csv (guaranteed key products per country)
+  and task1_data.csv if present.
 - Removes Internal_Notes (sensitive).
 - Standardizes country and category.
 - Builds a searchable text field from Item_Name + Technical_Specs.
@@ -29,6 +31,7 @@ def standardize_category(s: str) -> str:
 def main():
     base = Path(__file__).resolve().parent.parent.parent
     raw_path = base / "data" / "raw" / "products_raw.csv"
+    seed_path = base / "data" / "raw" / "seed_products.csv"
     task1_path = base / "data" / "raw" / "task1_data.csv"
     processed_dir = base / "data" / "processed"
     processed_dir.mkdir(parents=True, exist_ok=True)
@@ -40,6 +43,10 @@ def main():
         )
 
     df = pd.read_csv(raw_path)
+    # Seed: guaranteed key products (LED TV, Solar Inverter, Smart Kettle) per country for demos and evals
+    if seed_path.exists():
+        seed = pd.read_csv(seed_path)
+        df = pd.concat([df, seed], ignore_index=True)
     if task1_path.exists():
         task1 = pd.read_csv(task1_path)
         df = pd.concat([df, task1], ignore_index=True)

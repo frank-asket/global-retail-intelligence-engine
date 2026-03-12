@@ -5001,6 +5001,106 @@
 },
 {
 "country": "Ghana",
+"product_id": "GH-SEED-001",
+"category": "Tv & Display",
+"item_name": "LED TV 55 inch",
+"price_local": 5999.0,
+"currency": "GHS",
+"technical_specs": "55\" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi",
+"searchable_text": "LED TV 55 inch 55\" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi"
+},
+{
+"country": "Nigeria",
+"product_id": "NI-SEED-001",
+"category": "Tv & Display",
+"item_name": "LED TV 55 inch",
+"price_local": 745000.0,
+"currency": "NGN",
+"technical_specs": "55\" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi",
+"searchable_text": "LED TV 55 inch 55\" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi"
+},
+{
+"country": "Côte d'Ivoire",
+"product_id": "CI-SEED-001",
+"category": "Tv & Display",
+"item_name": "LED TV 55 inch",
+"price_local": 282000.0,
+"currency": "XOF",
+"technical_specs": "55\" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi",
+"searchable_text": "LED TV 55 inch 55\" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi"
+},
+{
+"country": "South Africa",
+"product_id": "ZA-SEED-001",
+"category": "Tv & Display",
+"item_name": "LED TV 55 inch",
+"price_local": 8499.0,
+"currency": "ZAR",
+"technical_specs": "55\" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi",
+"searchable_text": "LED TV 55 inch 55\" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi"
+},
+{
+"country": "Kenya",
+"product_id": "KE-SEED-001",
+"category": "Tv & Display",
+"item_name": "LED TV 55 inch",
+"price_local": 58500.0,
+"currency": "KES",
+"technical_specs": "55\" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi",
+"searchable_text": "LED TV 55 inch 55\" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi"
+},
+{
+"country": "Ghana",
+"product_id": "GH-SEED-002",
+"category": "Solar & Power",
+"item_name": "Solar Inverter TS-9000-X",
+"price_local": 15200.0,
+"currency": "GHS",
+"technical_specs": "5kW capacity, IP65 rated, 10-year warranty, MPPT tracking",
+"searchable_text": "Solar Inverter TS-9000-X 5kW capacity, IP65 rated, 10-year warranty, MPPT tracking"
+},
+{
+"country": "Nigeria",
+"product_id": "NI-SEED-002",
+"category": "Solar & Power",
+"item_name": "Solar Inverter TS-9000-X",
+"price_local": 1950000.0,
+"currency": "NGN",
+"technical_specs": "5kW capacity, IP65 rated, 10-year warranty, MPPT tracking",
+"searchable_text": "Solar Inverter TS-9000-X 5kW capacity, IP65 rated, 10-year warranty, MPPT tracking"
+},
+{
+"country": "Côte d'Ivoire",
+"product_id": "CI-SEED-002",
+"category": "Solar & Power",
+"item_name": "Solar Inverter TS-9000-X",
+"price_local": 738000.0,
+"currency": "XOF",
+"technical_specs": "5kW capacity, IP65 rated, 10-year warranty, MPPT tracking",
+"searchable_text": "Solar Inverter TS-9000-X 5kW capacity, IP65 rated, 10-year warranty, MPPT tracking"
+},
+{
+"country": "Ghana",
+"product_id": "GH-SEED-003",
+"category": "Kitchen Appliances",
+"item_name": "Smart Kettle Pro",
+"price_local": 562.0,
+"currency": "GHS",
+"technical_specs": "1.7L, 3000W, boil-dry protection, LED display",
+"searchable_text": "Smart Kettle Pro 1.7L, 3000W, boil-dry protection, LED display"
+},
+{
+"country": "Nigeria",
+"product_id": "NI-SEED-003",
+"category": "Kitchen Appliances",
+"item_name": "Smart Kettle Pro",
+"price_local": 69800.0,
+"currency": "NGN",
+"technical_specs": "1.7L, 3000W, boil-dry protection, LED display",
+"searchable_text": "Smart Kettle Pro 1.7L, 3000W, boil-dry protection, LED display"
+},
+{
+"country": "Ghana",
 "product_id": "GH-K-001",
 "category": "Kitchen",
 "item_name": "EcoVolt Smart Kettle",

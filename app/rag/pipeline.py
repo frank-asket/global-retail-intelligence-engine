@@ -63,6 +63,13 @@ def _call_llm(prompt: str) -> str:
         return f"[LLM error: {e}] Use the context above to answer."
 
 
+# When retrieval returns no docs, we return this instead of calling the LLM (consistent, friendly, no hallucination)
+NO_CONTEXT_RESPONSE = (
+    "I couldn't find that product or region in our current catalog. "
+    "You can try asking for a different country, another product name, or our warranty and policy information—I'm happy to help with those."
+)
+
+
 def _sanitize_response(text: str) -> str:
     """Remove any leaked restricted terms from the model output."""
     bad = ["supplier", "margin", "internal notes", "warehouse", "profit margin"]
@@ -171,11 +178,15 @@ def run_rag(
         ]
         docs = _merge_retrieval_results(per_query_docs, top_k)
 
-    # 6. Build prompt (with intent hint) and call LLM
+    # 6. No context: return a clear, friendly message without calling the LLM
+    if not docs:
+        return RAGResponse(response=NO_CONTEXT_RESPONSE, blocked=False)
+
+    # 7. Build prompt (with intent hint) and call LLM
     prompt = build_rag_prompt(query, docs, countries=resolved_countries, intent=intent)
     answer = _call_llm(prompt)
 
-    # 7. Sanitize
+    # 8. Sanitize
     answer = _sanitize_response(answer)
 
     return RAGResponse(response=answer, blocked=False)

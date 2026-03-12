@@ -330,6 +330,8 @@ python scripts/generate_retail_dataset.py --records 500
 
 Optional: `--output data/raw/products_test.csv` to write to a separate file; `--seed 42` for reproducible data.
 
+**Seed data:** `data/raw/seed_products.csv` is merged during ingestion and guarantees key products (LED TV 55", Solar Inverter, Smart Kettle) for Ghana, Nigeria, Côte d'Ivoire, South Africa, and Kenya so demos and multi-country comparison always have coverage.
+
 ### **3. Build vector index**
 
 ```bash

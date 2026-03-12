@@ -499,6 +499,16 @@ NE-C-0496,Netherlands,Personal Care,Electric Toothbrush,39.9,EUR,"Sonic, 3 modes
 US-D-0497,United States,Wearables,Fitness Tracker Band,28.38,USD,"Steps, sleep, HR, 14-day battery","Fitness Tracker Band Steps, sleep, HR, 14-day battery"
 CA-E-0498,Canada,Power & Batteries,Portable Power Bank 20K,34.43,CAD,"20000mAh, dual USB, 18W PD","Portable Power Bank 20K 20000mAh, dual USB, 18W PD"
 CD-F-0499,Côte d'Ivoire,Power & Batteries,Portable Power Bank 20K,15718.73,XOF,"20000mAh, dual USB, 18W PD","Portable Power Bank 20K 20000mAh, dual USB, 18W PD"
+GH-SEED-001,Ghana,Tv & Display,LED TV 55 inch,5999.0,GHS,"55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi","LED TV 55 inch 55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi"
+NI-SEED-001,Nigeria,Tv & Display,LED TV 55 inch,745000.0,NGN,"55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi","LED TV 55 inch 55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi"
+CI-SEED-001,Côte d'Ivoire,Tv & Display,LED TV 55 inch,282000.0,XOF,"55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi","LED TV 55 inch 55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi"
+ZA-SEED-001,South Africa,Tv & Display,LED TV 55 inch,8499.0,ZAR,"55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi","LED TV 55 inch 55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi"
+KE-SEED-001,Kenya,Tv & Display,LED TV 55 inch,58500.0,KES,"55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi","LED TV 55 inch 55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi"
+GH-SEED-002,Ghana,Solar & Power,Solar Inverter TS-9000-X,15200.0,GHS,"5kW capacity, IP65 rated, 10-year warranty, MPPT tracking","Solar Inverter TS-9000-X 5kW capacity, IP65 rated, 10-year warranty, MPPT tracking"
+NI-SEED-002,Nigeria,Solar & Power,Solar Inverter TS-9000-X,1950000.0,NGN,"5kW capacity, IP65 rated, 10-year warranty, MPPT tracking","Solar Inverter TS-9000-X 5kW capacity, IP65 rated, 10-year warranty, MPPT tracking"
+CI-SEED-002,Côte d'Ivoire,Solar & Power,Solar Inverter TS-9000-X,738000.0,XOF,"5kW capacity, IP65 rated, 10-year warranty, MPPT tracking","Solar Inverter TS-9000-X 5kW capacity, IP65 rated, 10-year warranty, MPPT tracking"
+GH-SEED-003,Ghana,Kitchen Appliances,Smart Kettle Pro,562.0,GHS,"1.7L, 3000W, boil-dry protection, LED display","Smart Kettle Pro 1.7L, 3000W, boil-dry protection, LED display"
+NI-SEED-003,Nigeria,Kitchen Appliances,Smart Kettle Pro,69800.0,NGN,"1.7L, 3000W, boil-dry protection, LED display","Smart Kettle Pro 1.7L, 3000W, boil-dry protection, LED display"
 GH-K-001,Ghana,Kitchen,EcoVolt Smart Kettle,850.0,GHS,1.7L capacity; 220V-240V; Rapid boil feature.,EcoVolt Smart Kettle 1.7L capacity; 220V-240V; Rapid boil feature.
 DE-L-441,Germany,Electronics,Steinberg ProBook X1,1299.0,EUR,QWERTZ Layout; Intel i7; 32GB RAM; 1TB SSD.,Steinberg ProBook X1 QWERTZ Layout; Intel i7; 32GB RAM; 1TB SSD.
 ZA-S-900,South Africa,Energy,Solar Inverter TS-9000-X,15000.0,ZAR,5kW capacity; Pure Sine Wave; IP65 Rated.,Solar Inverter TS-9000-X 5kW capacity; Pure Sine Wave; IP65 Rated.

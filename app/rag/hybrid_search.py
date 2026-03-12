@@ -1,4 +1,4 @@
-
+import math
 import json
 from pathlib import Path
 from typing import Any, List, Optional
@@ -76,6 +76,38 @@ class HybridRetriever:
             if (self._metadata[i].get("category") or "").strip().lower() in allowed
         ]
 
+    def _balance_by_countries(
+        self,
+        fused: List[tuple],
+        filtered: List[int],
+        countries: List[str],
+        k: int,
+    ) -> List[int]:
+        """
+        When multiple countries are requested, return a balanced set so each country
+        is represented (for price comparison). Takes up to per_country_k docs per
+        country from fused order,         so Nigeria and Ghana both appear in context.
+        """
+        allowed_lower = {c.strip().lower() for c in countries if c}
+        per_country_k = max(2, math.ceil(k / len(countries)))
+        quota = {c: per_country_k for c in allowed_lower}
+        result: List[int] = []
+        seen = set()
+        for idx, _ in fused:
+            if idx not in filtered or idx in seen:
+                continue
+            doc_country = (self._metadata[idx].get("country") or "").strip().lower()
+            if doc_country not in allowed_lower:
+                continue
+            if quota.get(doc_country, 0) <= 0:
+                continue
+            result.append(idx)
+            seen.add(idx)
+            quota[doc_country] = quota.get(doc_country, 0) - 1
+            if len(result) >= k:
+                break
+        return result if result else filtered[:k]
+
     def search(
         self,
         query: str,
@@ -136,12 +168,18 @@ class HybridRetriever:
         ordered_indices = [idx for idx, _ in fused]
         if countries and len(countries) > 0:
             filtered = self._filter_by_countries(ordered_indices, countries)
+            # Multi-country: ensure each requested country is represented (for price comparison)
+            if len(countries) > 1 and filtered:
+                filtered = self._balance_by_countries(
+                    fused, filtered, countries, k
+                )
         else:
             filtered = self._filter_by_country(ordered_indices, country)
         if not filtered and (country or (countries and len(countries) > 0)):
             filtered = ordered_indices[:k]
         else:
-            filtered = filtered[:k] if filtered else ordered_indices[:k]
+            if not (countries and len(countries) > 1):
+                filtered = filtered[:k] if filtered else ordered_indices[:k]
 
         if allowed_categories:
             # Apply category filter to full ordered list so we get enough matches

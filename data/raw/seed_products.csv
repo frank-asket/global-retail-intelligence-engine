@@ -1,0 +1,11 @@
+Product_ID,Country,Category,Item_Name,Price_Local,Currency,Technical_Specs,Internal_Notes
+GH-SEED-001,Ghana,TV & Display,LED TV 55 inch,5999.00,GHS,"55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi",Margin 22% | Africa Direct Trading | Accra Warehouse
+NI-SEED-001,Nigeria,TV & Display,LED TV 55 inch,745000.00,NGN,"55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi",Margin 22% | Africa Direct Trading | Lagos depot
+CI-SEED-001,Côte d'Ivoire,TV & Display,LED TV 55 inch,282000.00,XOF,"55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi",Margin 22% | Africa Direct Trading | Abidjan
+ZA-SEED-001,South Africa,TV & Display,LED TV 55 inch,8499.00,ZAR,"55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi",Margin 22% | EuroTech Suppliers | Johannesburg
+KE-SEED-001,Kenya,TV & Display,LED TV 55 inch,58500.00,KES,"55"" FHD LED, Smart TV, 3x HDMI, USB, built-in WiFi",Margin 22% | Africa Direct Trading | Nairobi
+GH-SEED-002,Ghana,Solar & Power,Solar Inverter TS-9000-X,15200.00,GHS,"5kW capacity, IP65 rated, 10-year warranty, MPPT tracking",Margin 22% | Nordic Wholesale | Accra
+NI-SEED-002,Nigeria,Solar & Power,Solar Inverter TS-9000-X,1950000.00,NGN,"5kW capacity, IP65 rated, 10-year warranty, MPPT tracking",Margin 22% | Africa Direct Trading | Lagos
+CI-SEED-002,Côte d'Ivoire,Solar & Power,Solar Inverter TS-9000-X,738000.00,XOF,"5kW capacity, IP65 rated, 10-year warranty, MPPT tracking",Margin 22% | Africa Direct Trading | Abidjan
+GH-SEED-003,Ghana,Kitchen Appliances,Smart Kettle Pro,562.00,GHS,"1.7L, 3000W, boil-dry protection, LED display",Margin 22% | EuroTech Suppliers | Accra
+NI-SEED-003,Nigeria,Kitchen Appliances,Smart Kettle Pro,69800.00,NGN,"1.7L, 3000W, boil-dry protection, LED display",Margin 22% | Africa Direct Trading | Lagos
