@@ -19,9 +19,9 @@ def extract_country_from_query(query: str) -> Optional[str]:
     Returns None if not found.
     """
     q = query.strip()
-    # "from X", "in X", "shopping in X", "I am in X"
+    # "from X", "in X", "shopping in X", "shopping from X", "I am in X"
     for c in COUNTRIES:
-        if re.search(rf"\b(from|in|shopping\s+in|I\s+am\s+in)\s+{re.escape(c)}\b", q, re.I):
+        if re.search(rf"\b(from|in|shopping\s+in|shopping\s+from|I\s+am\s+in)\s+{re.escape(c)}\b", q, re.I):
             if c in ("UK", "USA", "US"):
                 return "United Kingdom" if c == "UK" else "United States"
             return c
