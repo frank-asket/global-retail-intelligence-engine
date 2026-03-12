@@ -1,0 +1,30 @@
+# Environment and secrets – never commit credentials
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# IDE and OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Project-specific (optional: uncomment if you don't want to track large data/index)
+# data/raw/*.csv
+# data/processed/*.csv
+# vector_store/
