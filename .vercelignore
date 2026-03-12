@@ -1,0 +1,19 @@
+# Reduce deploy bundle size – keep data/processed and vector_store for the index
+venv
+.venv
+__pycache__
+*.pyc
+.git
+.env
+.env.*
+evaluation
+frontend
+scripts
+docs
+*.xlsx
+*.docx
+data/raw
+.vercel
+.cursor
+README.md
+*.md

@@ -1,16 +1,14 @@
-"""
-Hybrid retriever: FAISS vector search + BM25 keyword search with metadata (country) filtering.
-Returns top-k results, optionally filtered by country.
-"""
+
 import json
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, List, Optional
 
 import faiss
 import numpy as np
 from rank_bm25 import BM25Okapi
 from sentence_transformers import SentenceTransformer
 
+from app.rag.metadata_filter import filter_docs_metadata
 
 # Default index path relative to project root
 def _default_index_path() -> Path:
@@ -58,26 +56,56 @@ class HybridRetriever:
             if self._metadata[i].get("country", "").lower() == country_lower
         ]
 
+    def _filter_by_countries(self, indices: List[int], countries: Optional[List[str]]) -> List[int]:
+        """Keep only docs whose country is in the given list (any of Ghana, Nigeria, etc.)."""
+        if not countries or not any(c and str(c).strip() for c in countries):
+            return indices
+        allowed = {str(c).strip().lower() for c in countries if c and str(c).strip()}
+        return [
+            i for i in indices
+            if self._metadata[i].get("country", "").lower() in allowed
+        ]
+
+    def _filter_by_category(self, indices: List[int], allowed_categories: Optional[List[str]]) -> List[int]:
+        """Keep only docs whose category is in allowed_categories (case-insensitive)."""
+        if not allowed_categories:
+            return indices
+        allowed = {c.strip().lower() for c in allowed_categories if c}
+        return [
+            i for i in indices
+            if (self._metadata[i].get("category") or "").strip().lower() in allowed
+        ]
+
     def search(
         self,
         query: str,
         country: Optional[str] = None,
+        countries: Optional[List[str]] = None,
         top_k: Optional[int] = None,
         prefer_policy: bool = False,
+        allowed_categories: Optional[List[str]] = None,
     ) -> list[dict[str, Any]]:
         """
-        Run hybrid search (vector + BM25), optionally filter by country.
+        Run hybrid search (vector + BM25), optionally filter by country/countries and category.
         When prefer_policy is True (warranty/policy queries), boost docs with category Policy.
-        Returns list of metadata dicts with score, ordered by relevance.
+        countries: if set, return docs from any of these countries (e.g. Ghana and Nigeria).
+        country: single country (used if countries is not set). Backward compatible.
+        allowed_categories: if set, strict filter to only these categories (e.g. ["Policy"]).
+        Returns list of metadata dicts (allowed fields only) with score, ordered by relevance.
         """
         k = top_k or self.top_k
+        # When asking for multiple countries, fetch more so we get results per country
+        if countries and len(countries) > 1:
+            k = min(k * len(countries), 20)  # cap at 20
         self._ensure_loaded()
 
         # Vector search
         q_emb = self._model.encode([query])
         q_emb = np.array(q_emb, dtype=np.float32)
         faiss.normalize_L2(q_emb)
-        vector_k = min(k * 3, len(self._metadata))  # over-fetch for filtering
+        has_country_filter = country or (countries and len(countries) > 0)
+        overfetch = (k * 20) if (has_country_filter or allowed_categories) else (k * 3)
+        vector_k = min(overfetch, len(self._metadata))
         scores_vec, indices_vec = self._index.search(q_emb, vector_k)
         indices_vec = indices_vec[0].tolist()
         scores_vec = scores_vec[0].tolist()
@@ -104,17 +132,37 @@ class HybridRetriever:
             fused.append((idx, score))
         fused.sort(key=lambda x: -x[1])
 
-        # Apply country filter and take top_k
+        # Apply country filter: prefer countries list (multi-country), else single country
         ordered_indices = [idx for idx, _ in fused]
-        filtered = self._filter_by_country(ordered_indices, country)
-        if not filtered and country:
+        if countries and len(countries) > 0:
+            filtered = self._filter_by_countries(ordered_indices, countries)
+        else:
+            filtered = self._filter_by_country(ordered_indices, country)
+        if not filtered and (country or (countries and len(countries) > 0)):
             filtered = ordered_indices[:k]
         else:
             filtered = filtered[:k] if filtered else ordered_indices[:k]
+
+        if allowed_categories:
+            # Apply category filter to full ordered list so we get enough matches
+            category_filtered = self._filter_by_category(ordered_indices, allowed_categories)
+            if category_filtered:
+                filtered = category_filtered[:k]
+            else:
+                filtered = ordered_indices[:k]  # fallback if no category match
+
+        # For generic queries (e.g. "give me 5 products' prices"), fused scores can be
+        # low and results arbitrary; ensure we have enough by falling back to diverse docs
+        if len(filtered) < k and not country:
+            step = max(1, len(self._metadata) // k)
+            fallback = [min(i * step, len(self._metadata) - 1) for i in range(k)]
+            fallback = list(dict.fromkeys(fallback))[:k]  # unique, preserve order
+            filtered = filtered + [i for i in fallback if i not in filtered][: k - len(filtered)]
 
         results = []
         for idx in filtered:
             meta = dict(self._metadata[idx])
             meta["score"] = next(s for i, s in fused if i == idx)
             results.append(meta)
-        return results
+        # Strict metadata filtering: only allowed fields returned
+        return filter_docs_metadata(results)
